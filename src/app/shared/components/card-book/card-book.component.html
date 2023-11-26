@@ -1,0 +1,22 @@
+<div class="card">
+  <p>My books</p>
+  <form [formGroup]="bookForm">
+    <input type="text" formControlName="title" />
+    <textarea formControlName="description"></textarea>
+    <button (click)="addBook()" *ngIf="isActiveCreateBook; else btnEdit">
+      Add Book
+    </button>
+  </form>
+  <div *ngFor="let item of listBooks">
+    <h4>{{ item.title }}</h4>
+    <p>{{ item.description }}</p>
+    <label>{{ item.createdAt | date }}</label>
+    <label>{{ item.updatedAt | date }}</label>
+    <button (click)="editBook(item)">Edit Book</button>
+    <button (click)="deleteBook(item.id)">Delete Book</button>
+  </div>
+</div>
+<ng-template #btnEdit>
+  <button (click)="putBook()">Save Changes Book</button>
+  <button (click)="cancelEditBook()">Cancel</button>
+</ng-template>
