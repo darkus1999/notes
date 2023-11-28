@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookModel } from '../../../core/models/books';
 import { NotesService } from '../../services/notes.service';
 
@@ -18,7 +18,7 @@ export class CardBookComponent implements OnInit {
     this.isActiveCreateBook = true;
     this.bookForm = this.fb.group({
       id: '',
-      title: '',
+      title: ['', Validators.required],
       description: '',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -33,6 +33,7 @@ export class CardBookComponent implements OnInit {
     this.listBooks = await Promise.resolve(this.noteService.getAllBook());
   }
   addBook() {
+    if (this.bookForm.invalid) return;
     this.noteService.createBook(this.bookForm.value).then(() => {
       this.resetBookForm();
       this.getBooks();

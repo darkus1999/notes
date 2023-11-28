@@ -1,22 +1,66 @@
-<div class="card">
-  <p>My books</p>
-  <form [formGroup]="bookForm">
-    <input type="text" formControlName="title" />
-    <textarea formControlName="description"></textarea>
-    <button (click)="addBook()" *ngIf="isActiveCreateBook; else btnEdit">
-      Add Book
-    </button>
-  </form>
-  <div *ngFor="let item of listBooks">
-    <h4>{{ item.title }}</h4>
-    <p>{{ item.description }}</p>
-    <label>{{ item.createdAt | date }}</label>
-    <label>{{ item.updatedAt | date }}</label>
-    <button (click)="editBook(item)">Edit Book</button>
-    <button (click)="deleteBook(item.id)">Delete Book</button>
+<div class="panel">
+  <div class="_container-form">
+    <form [formGroup]="bookForm" class="form">
+      <h3>Write your note</h3>
+      <mat-form-field class="_input">
+        <mat-label>Enter title</mat-label>
+        <input matInput placeholder="Mi note" formControlName="title" />
+      </mat-form-field>
+      <quill-editor
+        formControlName="description"
+        placeholder="Enter description"
+      ></quill-editor>
+      <button
+        [disabled]="bookForm.invalid"
+        mat-raised-button
+        color="warn"
+        (click)="addBook()"
+        *ngIf="isActiveCreateBook; else btnEdit"
+      >
+        Add Note
+      </button>
+    </form>
+  </div>
+  <div class="_container-book" [ngClass]="!listBooks.length ? '--center' : ''">
+    <div *ngFor="let item of listBooks">
+      <mat-card class="card">
+        <mat-card-header class="_header">
+          <mat-card-title>{{ item.title }}</mat-card-title>
+          <mat-card-subtitle class="_subtitle">
+            <div>
+              <label>Creado: {{ item.createdAt | date }}</label>
+              <label>Actualizado: {{ item.updatedAt | date }}</label>
+            </div>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="_content">
+          <div [innerHTML]="item.description"></div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button (click)="editBook(item)" class="btn --edit">
+            Edit Note
+          </button>
+          <button mat-button (click)="deleteBook(item.id)" color="warn">
+            Delete Note
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    <div *ngIf="!listBooks.length" class="--empty">
+      <h3>Empty Notes</h3>
+    </div>
   </div>
 </div>
 <ng-template #btnEdit>
-  <button (click)="putBook()">Save Changes Book</button>
-  <button (click)="cancelEditBook()">Cancel</button>
+  <button
+    (click)="putBook()"
+    mat-raised-button
+    color="warn"
+    [disabled]="bookForm.invalid"
+  >
+    Save Changes
+  </button>
+  <button (click)="cancelEditBook()" mat-button class="btn --cancel">
+    Cancel
+  </button>
 </ng-template>

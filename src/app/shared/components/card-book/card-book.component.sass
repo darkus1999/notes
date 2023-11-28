@@ -1,3 +1,50 @@
-.card
-  background: red
+$breakpoint-sm: 576px
+$breakpoint-md: 768px
+$breakpoint-lg: 992px
+.panel
+  display: grid
+  column-gap: 2%
+  min-height: 100vh
+  & ._container-book
+    padding: 5px
+    background: #edca65
+    &.--center
+      display: flex
+      justify-content: center
+      align-items: center
+    & .--empty
+      border: 2px solid #cba20b
+      color: #cba20b
+      padding: 20px
+      border-radius: 10px
+.form
   padding: 30px 10px
+  display: flex
+  flex-direction: column
+  gap: 15px
+  & ._input
+    width: 100%
+
+.card
+  margin-bottom: 5px
+  & ._header
+    & ._subtitle
+      & div
+        display: flex
+        flex-direction: row
+        gap: 20px
+.btn
+  &.--edit
+      background: #f9a504
+      color: white
+  &.--cancel
+      background: #e1e1e1
+
+@media (min-width: $breakpoint-md)
+  .panel
+    grid-template-columns: 58% 40%
+
+@media (min-width: $breakpoint-lg)
+  .panel
+    grid-template-columns: 55% 43%
+
