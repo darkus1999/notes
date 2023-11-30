@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BookModel, NoteModel } from '../../core/models/books';
+import {
+  BookModel,
+  BookModelIdOpcional,
+  NoteModel,
+} from '../../core/models/books';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotesService {
-  private openRequest = indexedDB.open('DBNoteBook', 1);
+  private openRequest = indexedDB.open('DBNoteBook', 2);
   private db?: IDBDatabase;
   private dbReady?: Promise<IDBDatabase>;
   books: BookModel[] = [];
@@ -43,14 +47,6 @@ export class NotesService {
       });
     }
   };
-  // private errorIndexedDb = (event: Event) => {
-  //   const err = (event.target as IDBOpenDBRequest).error;
-  //   console.error('Error', err);
-  // };
-  // private successIndexedDb = (event: Event) => {
-  //   this.db = (event.target as IDBOpenDBRequest).result;
-  //   console.log('Success', this.db);
-  // };
   getAllBook(): Promise<BookModel[]> {
     const request = new Promise<BookModel[]>((resolve, reject) => {
       if (!this.dbReady) {
@@ -77,12 +73,9 @@ export class NotesService {
       }
       let transaction = this.db.transaction('book', 'readwrite');
       let books = transaction.objectStore('book');
-      let request = books.add({
-        title: book.title,
-        description: book.description,
-        createdAt: book.createdAt,
-        updatedAt: book.updatedAt,
-      });
+      let bookCopy: BookModelIdOpcional = { ...book };
+      delete bookCopy.id;
+      let request = books.add(bookCopy);
       request.onsuccess = () => {
         resolve(request.result);
       };
@@ -130,11 +123,10 @@ export class NotesService {
   }
   createNote(note: NoteModel) {
     if (!this.db) return;
-    let transaction = this.db.transaction('note', 'readwrite'); // (1)
-    let notes = transaction.objectStore('note'); // (2)
-    let request = notes.add(note); // (3)
+    let transaction = this.db.transaction('note', 'readwrite');
+    let notes = transaction.objectStore('note');
+    let request = notes.add(note);
     request.onsuccess = function () {
-      // (4)
       console.log('Libro agregado al almacén', request.result);
     };
     request.onerror = function () {

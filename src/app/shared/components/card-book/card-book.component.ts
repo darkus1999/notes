@@ -7,6 +7,7 @@ import { NotesService } from '../../services/notes.service';
   selector: 'app-card-book',
   templateUrl: './card-book.component.html',
   styleUrls: ['./card-book.component.sass'],
+  // encapsulation: ViewEncapsulation.None,
 })
 export class CardBookComponent implements OnInit {
   listBooks: BookModel[] = [];
@@ -18,8 +19,11 @@ export class CardBookComponent implements OnInit {
     this.isActiveCreateBook = true;
     this.bookForm = this.fb.group({
       id: '',
-      title: ['', Validators.required],
+      title: ['', [Validators.required, Validators.max(150)]],
       description: '',
+      phone: ['', Validators.min(9)],
+      email: ['', Validators.email],
+      responsible: ['', Validators.max(50)],
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -59,6 +63,9 @@ export class CardBookComponent implements OnInit {
       id: book.id,
       title: book.title,
       description: book.description,
+      phone: book.phone,
+      email: book.email,
+      responsible: book.responsible,
       createdAt: book.createdAt,
       updatedAt: new Date(),
     });

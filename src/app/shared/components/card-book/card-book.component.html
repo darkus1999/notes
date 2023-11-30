@@ -2,6 +2,37 @@
   <div class="_container-form">
     <form [formGroup]="bookForm" class="form">
       <h3>Write your note</h3>
+      <div class="col-break-2">
+        <mat-form-field class="_input">
+          <mat-label>Enter responsible</mat-label>
+          <input
+            matInput
+            placeholder="Name of responsible"
+            formControlName="responsible"
+          />
+        </mat-form-field>
+        <mat-form-field class="_input">
+          <mat-label>Telephone</mat-label>
+          <span matPrefix>+51 &nbsp;</span>
+          <input
+            type="text"
+            formControlName="phone"
+            matInput
+            placeholder="555-555-123"
+            mask="000-000-000"
+          />
+          <mat-icon matSuffix>mode_edit</mat-icon>
+        </mat-form-field>
+      </div>
+      <mat-form-field class="_input">
+        <mat-label>Enter email</mat-label>
+        <input
+          type="email"
+          matInput
+          placeholder="example@example.com"
+          formControlName="email"
+        />
+      </mat-form-field>
       <mat-form-field class="_input">
         <mat-label>Enter title</mat-label>
         <input matInput placeholder="Mi note" formControlName="title" />
@@ -28,13 +59,19 @@
           <mat-card-title>{{ item.title }}</mat-card-title>
           <mat-card-subtitle class="_subtitle">
             <div>
+              <label>Responsable: {{ item.responsible || "No aplica" }}</label>
+              <label
+                ><mat-icon>contact_phone</mat-icon
+                >{{ item.phone || "No aplica" }}</label
+              >
+              <label>Email: {{ item.email || "No aplica" }}</label>
               <label>Creado: {{ item.createdAt | date }}</label>
               <label>Actualizado: {{ item.updatedAt | date }}</label>
             </div>
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content class="_content">
-          <div [innerHTML]="item.description"></div>
+          <div [innerHTML]="item.description" class="--renderhtml"></div>
         </mat-card-content>
         <mat-card-actions>
           <button mat-raised-button (click)="editBook(item)" class="btn --edit">
